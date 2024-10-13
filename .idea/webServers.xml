@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="780202b9-ad97-4488-953b-a8fb0b8d636e" name="Docker Deployment" url="http://localhost:8080">
+        <fileTransfer mountedRoot="C:\WEB DEV" accessType="MOUNT" port="0" />
+      </webServer>
+    </option>
+  </component>
+</project>
