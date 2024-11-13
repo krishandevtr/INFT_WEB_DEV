@@ -1,13 +1,9 @@
 # Use Composer official image to install dependencies
 FROM composer:latest AS composer
 WORKDIR /app
-COPY ./composer.json ./
 
-# Explicitly require fakerphp/faker and phpmailer/phpmailer if not already in composer.json
-#RUN composer require fakerphp/faker phpmailer/phpmailer --no-update
-
-# Install all Composer dependencies
-#RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader --no-interaction
+# Install Laravel (for a new project)
+RUN composer create-project --prefer-dist laravel/laravel .
 
 # Use the PHP 8.2 with Apache image
 FROM php:8.2-apache
@@ -27,29 +23,29 @@ RUN apt-get update && apt-get install -y \
         && docker-php-ext-enable xdebug
 
 # Install Composer
-COPY config/apache/000-default.conf /etc/apache2/sites-available/000-default.confcd
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-# Configure Xdebug
-RUN echo "zend_extension=xdebug.so" >> /usr/local/etc/php/php.ini
-RUN echo "xdebug.mode=develop,debug" >> /usr/local/etc/php/php.ini
-RUN echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/php.ini
-RUN echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/php.ini
-RUN echo "xdebug.client_port=9003" >> /usr/local/etc/php/php.ini
-RUN echo "xdebug.discover_client_host=0" >> /usr/local/etc/php/php.ini
-
-# Set the working directory
+# Set the working directory to the Apache document root
 WORKDIR /var/www/html
 
-# Copy the application files
-COPY . /var/www/html
+# Copy the Laravel project from the Composer build stage
+COPY --from=composer /app /var/www/html
+
+#----------------------------------------------------------
+# Copy custom Apache virtual host configuration
+COPY ./config/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+# Enable mod_rewrite for Laravel
+RUN a2enmod rewrite
+
+# Restart Apache to apply the changes
+RUN service apache2 restart
+#----------------------------------------------------------
 
 # Ensure required directories exist and set permissions
 RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Install Composer dependencies
-#RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Expose the port Apache will run on
 EXPOSE 80

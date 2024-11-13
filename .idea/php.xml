@@ -134,6 +134,7 @@
       <path value="$PROJECT_DIR$/example/vendor/nesbot/carbon" />
       <path value="$PROJECT_DIR$/example/vendor/ramsey/collection" />
       <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/example/vendor/laravel/pail" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
@@ -145,6 +146,7 @@
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" />
+      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/example/phpunit.xml" custom_loader_path="$PROJECT_DIR$/example/vendor/autoload.php" paratest_path="$PROJECT_DIR$/example/vendor/bin/paratest_for_phpstorm" use_configuration_file="true" />
     </phpunit_settings>
   </component>
   <component name="PsalmOptionsConfiguration">
