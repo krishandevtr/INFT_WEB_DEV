@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-abstract class Controller
+class HomeController extends Controller
 {
-    //
+    public function showHomePage()
+    {
+        return view('home.blade.php');
+    }
 }
