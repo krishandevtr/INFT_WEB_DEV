@@ -1,4 +1,4 @@
-<x-layout title="Jobs" heading="Edit Job Listing">
+<x-layout title="Jobs" heading="Edit {{ $job['title'] }}">
     <div class="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md">
 
         <form action="{{ route('jobs.update', $job->id) }}" method="POST">
